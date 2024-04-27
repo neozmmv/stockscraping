@@ -1,0 +1,165 @@
+from bs4 import BeautifulSoup
+from datetime import datetime
+from win11toast import toast
+import time
+import requests
+import gspread
+
+gc = gspread.service_account(filename="gsheet.json")
+sheet1 = gc.open("StockAVG").sheet1
+def getstock(link) -> str:
+    stock_url = link
+    stock_result = requests.get(stock_url)
+    time.sleep(1)
+    stock = BeautifulSoup(stock_result.text, "html.parser")
+    stock_value = stock.find("div", {"class": "BNeawe iBp4i AP7Wnd"})
+    return stock_value.text
+
+def tofloat(value) -> float:
+    varfloat = value.split(" ")[0].replace(",", ".")
+    return float(varfloat)
+
+now = datetime.now()
+print(f"Start: {now.strftime('%d/%m/%Y %H:%M:%S')}")
+print("CTRL C to stop")
+
+#PETR4_avg = float(sheet1.acell("G2").value.replace(",", "."))
+#BBAS3_avg = float(sheet1.acell("G3").value.replace(",", "."))
+#print(PETR4_avg)
+#print(BBAS3_avg)
+
+with open("stockdata.csv", "a") as database:
+    while True:
+        now = datetime.now()
+        try:
+            PETR4_value = getstock("https://www.google.com/search?client=firefox-b-d&q=petr4").replace(",", ".")
+            sheet1.update([[tofloat(PETR4_value)]], "F2")
+            PETR4_avg = float(sheet1.acell("G2").value.replace(",", "."))
+            if tofloat(PETR4_value) < PETR4_avg:
+                for i in range(5):
+                    print("PETR4 ABAIXO DA MEDIA!!")
+                    toast("ALERTA", "PETR4 ABAIXO DA MEDIA", duration="short")
+            sheet1.update([[tofloat(PETR4_value)]], "O1000")
+        except AttributeError:
+            print(f"Erro em PETR4 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            BBAS3_value = getstock("https://www.google.com/search?client=firefox-b-d&q=BVMF%3A+BBAS3").replace(",", ".")
+            sheet1.update([[tofloat(BBAS3_value)]], "F3")
+            BBAS3_avg = float(sheet1.acell("G3").value.replace(",", "."))
+            if tofloat(BBAS3_value) < BBAS3_avg:
+                for i in range(5):
+                    print("BBAS3 ABAIXO DA MEDIA!!")
+                    toast("ALERTA", "BBAS3 ABAIXO DA MEDIA", duration="short")
+            sheet1.update([[tofloat(BBAS3_value)]], "S1000")
+        except AttributeError:
+            print(f"Erro em BBAS3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            ITUB4_value = getstock("https://www.google.com/search?client=firefox-b-d&q=itub4").replace(",", ".")
+            sheet1.update([[tofloat(ITUB4_value)]], "F4") #CONTINUAR AQUI!!
+        except AttributeError:
+            print(f"Erro em ITUB4 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            VALE3_value = getstock("https://www.google.com/search?client=firefox-b-d&q=vale3").replace(",", ".")
+            sheet1.update([[tofloat(VALE3_value)]], "F5")
+        except AttributeError:
+            print(f"Erro em VALE3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            ABEV3_value = getstock("https://www.google.com/search?client=firefox-b-d&q=abev3").replace(",", ".")
+            sheet1.update([[tofloat(ABEV3_value)]], "F6")
+        except AttributeError:
+            print(f"Erro em ABEV3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            SANB11_value = getstock("https://www.google.com/search?client=firefox-b-d&q=sanb11").replace(",", ".")
+            sheet1.update([[tofloat(SANB11_value)]], "F7")
+        except AttributeError:
+            print(f"Erro em SANB11 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            ITSA4_value = getstock("https://www.google.com/search?client=firefox-b-d&q=itsa4").replace(",", ".")
+            sheet1.update([[tofloat(ITSA4_value)]], "F8")
+        except AttributeError:
+            print(f"Erro em ITSA4 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            BBDC3_value = getstock("https://www.google.com/search?client=firefox-b-d&q=bbdc3").replace(",", ".")
+            sheet1.update([[tofloat(BBDC3_value)]], "F9")
+        except AttributeError:
+            print(f"Erro em BBDC3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            GOAU4_value = getstock("https://www.google.com/search?client=firefox-b-d&q=goau4").replace(",", ".")
+            sheet1.update([[tofloat(GOAU4_value)]], "F10")
+        except AttributeError:
+            print(f"Erro em GOAU4 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            ELET3_value = getstock("https://www.google.com/search?client=firefox-b-d&q=elet3").replace(",", ".")
+            sheet1.update([[tofloat(ELET3_value)]], "F11")
+        except AttributeError:
+            print(f"Erro em ELET3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            CXSE3_value = getstock("https://www.google.com/search?client=firefox-b-d&q=cxse3").replace(",", ".")
+            sheet1.update([[tofloat(CXSE3_value)]], "F12")
+        except AttributeError:
+            print(f"Erro em CXSE3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            WEGE3_value = getstock("https://www.google.com/search?client=firefox-b-d&q=wege3").replace(",", ".")
+            sheet1.update([[tofloat(WEGE3_value)]], "F13")
+        except AttributeError:
+            print(f"Erro em WEGE3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            ASAI3_value = getstock("https://www.google.com/search?client=firefox-b-d&q=asai3").replace(",", ".")
+            sheet1.update([[tofloat(ASAI3_value)]], "F14")
+        except AttributeError:
+            print(f"Erro em ASAI3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            BPAC11_value = getstock("https://www.google.com/search?client=firefox-b-d&q=bpac11").replace(",", ".")
+            sheet1.update([[tofloat(BPAC11_value)]], "F15")
+        except AttributeError:
+            print(f"Erro em BPAC11 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            RADL3_value = getstock("https://www.google.com/search?client=firefox-b-d&q=radl3").replace(",", ".")
+            sheet1.update([[tofloat(RADL3_value)]], "F16")
+        except AttributeError:
+            print(f"Erro em RADL3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            PSSA3_value = getstock("https://www.google.com/search?client=firefox-b-d&q=pssa3").replace(",", ".")
+            sheet1.update([[tofloat(PSSA3_value)]], "F17")
+        except AttributeError:
+            print(f"Erro em PSSA3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            RENT3_value = getstock("https://www.google.com/search?client=firefox-b-d&q=rent3").replace(",", ".")
+            sheet1.update([[tofloat(RENT3_value)]], "F18")
+        except AttributeError:
+            print(f"Erro em RENT3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            EMBR3_value = getstock("https://www.google.com/search?client=firefox-b-d&q=embr3").replace(",", ".")
+            sheet1.update([[tofloat(EMBR3_value)]], "F19")
+        except AttributeError:
+            print(f"Erro em EMBR3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            EGIE3_value = getstock("https://www.google.com/search?client=firefox-b-d&q=egie3").replace(",", ".")
+            sheet1.update([[tofloat(EGIE3_value)]], "F20")
+        except AttributeError:
+            print(f"Erro em EGIE3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            GRND3_value = getstock("https://www.google.com/search?client=firefox-b-d&q=grnd3").replace(",", ".")
+            sheet1.update([[tofloat(GRND3_value)]], "F21")
+        except AttributeError:
+            print(f"Erro em GRND3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
