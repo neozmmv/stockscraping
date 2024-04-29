@@ -1,0 +1,234 @@
+from bs4 import BeautifulSoup
+from datetime import datetime
+import asyncio
+import httpx
+import time
+import requests
+import gspread
+
+gc = gspread.service_account(filename="gsheet.json")
+sheet1 = gc.open("StockAVG").sheet1
+sheet2 = gc.open("StockAVG").get_worksheet(1)
+sheet3 = gc.open("StockAVG").get_worksheet(2)
+def getstock(link) -> str:
+    stock_url = link
+    stock_result = requests.get(stock_url)
+    time.sleep(1)
+    stock = BeautifulSoup(stock_result.text, "html.parser")
+    stock_value = stock.find("div", {"class": "BNeawe iBp4i AP7Wnd"})
+    return stock_value.text
+
+def tofloat(value) -> float:
+    varfloat = value.split(" ")[0].replace(",", ".")
+    return float(varfloat)
+
+now = datetime.now()
+print(f"Start: {now.strftime('%d/%m/%Y %H:%M:%S')}")
+print("CTRL C to stop")
+
+#Linha 227
+
+with open("stockdata.csv", "a") as database:
+    while True:
+        now = datetime.now()
+        try:
+            PETR4_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=petr4"))
+            sheet1.update([[PETR4_value]], "F2")
+            sheet1.update([[PETR4_value]], "O1000")
+            PETR4_avg = float(sheet1.acell("G2").value.replace(",", "."))
+            if PETR4_value < PETR4_avg:
+                print("PETR4 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em PETR4 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            BBAS3_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=BVMF%3A+BBAS3"))
+            sheet1.update([[BBAS3_value]], "F3")
+            sheet1.update([[BBAS3_value]], "S1000")
+            BBAS3_avg = float(sheet1.acell("G3").value.replace(",", "."))
+            if BBAS3_value < BBAS3_avg:
+                print("BBAS3 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em BBAS3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            ITUB4_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=itub4"))
+            sheet1.update([[ITUB4_value]], "F4")
+            sheet1.update([[ITUB4_value]], "W1000")
+            ITUB4_avg = float(sheet1.acell("G4").value.replace(",", "."))
+            if ITUB4_value < ITUB4_avg:
+                print("ITUB4 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em ITUB4 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            VALE3_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=vale3"))
+            sheet1.update([[VALE3_value]], "F5")
+            sheet1.update([[VALE3_value]], "AA1000")
+            VALE3_avg = float(sheet1.acell("G5").value.replace(",", "."))
+            if VALE3_value < VALE3_avg:
+                print("VALE3 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em VALE3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            ABEV3_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=abev3"))
+            sheet1.update([[ABEV3_value]], "F6")
+            sheet1.update([[ABEV3_value]], "AE1000")
+            ABEV3_avg = float(sheet1.acell("G6").value.replace(",", "."))
+            if ABEV3_value < ABEV3_avg:
+                print("ABEV3 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em ABEV3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            SANB11_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=sanb11"))
+            sheet1.update([[SANB11_value]], "F7")
+            sheet1.update([[SANB11_value]], "AI1000")
+            SANB11_avg = float(sheet1.acell("G7").value.replace(",", "."))
+            if SANB11_value < SANB11_avg:
+                print("SANB11 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em SANB11 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            ITSA4_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=itsa4"))
+            sheet1.update([[ITSA4_value]], "F8")
+            sheet1.update([[ITSA4_value]], "AM1000")
+            ITSA4_avg = float(sheet1.acell("G8").value.replace(",", "."))
+            if ITSA4_value < ITSA4_avg:
+                print("ITSA4 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em ITSA4 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            BBDC3_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=bbdc3"))
+            sheet1.update([[BBDC3_value]], "F9")
+            sheet1.update([[BBDC3_value]], "AQ1000")
+            BBDC3_avg = float(sheet1.acell("G9").value.replace(",", "."))
+            if BBDC3_value < BBDC3_avg:
+                print("BBDC3 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em BBDC3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            GOAU4_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=goau4"))
+            sheet1.update([[GOAU4_value]], "F10")
+            sheet1.update([[GOAU4_value]], "AU1000")
+            GOAU4_avg = float(sheet1.acell("G10").value.replace(",", "."))
+            if GOAU4_value < GOAU4_avg:
+                print("GOAU4 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em GOAU4 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            ELET3_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=elet3"))
+            sheet1.update([[ELET3_value]], "F11")
+            sheet1.update([[ELET3_value]], "AY1000")
+            ELET3_avg = float(sheet1.acell("G11").value.replace(",", "."))
+            if ELET3_value < ELET3_avg:
+                print("ELET3 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em ELET3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            CXSE3_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=cxse3"))
+            sheet1.update([[CXSE3_value]], "F12")
+            sheet1.update([[CXSE3_value]], "BC1000")
+            CXSE3_avg = float(sheet1.acell("G12").value.replace(",", "."))
+            if CXSE3_value < CXSE3_avg:
+                print("CXSE3 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em CXSE3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            WEGE3_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=wege3"))
+            sheet1.update([[WEGE3_value]], "F13")
+            sheet1.update([[WEGE3_value]], "BG1000")
+            WEGE3_avg = float(sheet1.acell("G13").value.replace(",", "."))
+            if WEGE3_value < WEGE3_avg:
+                print("WEGE3 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em WEGE3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            ASAI3_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=asai3"))
+            sheet1.update([[ASAI3_value]], "F14")
+            sheet1.update([[ASAI3_value]], "BK1000")
+            ASAI3_avg = float(sheet1.acell("G14").value.replace(",", "."))
+            if ASAI3_value < ASAI3_avg:
+                print("ASAI3 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em ASAI3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            BPAC11_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=bpac11"))
+            sheet1.update([[tofloat(BPAC11_value)]], "F15")
+            sheet1.update([[tofloat(BPAC11_value)]], "BO1000")
+            BPAC11_avg = float(sheet1.acell("G15").value.replace(",", "."))
+            if BPAC11_value < BPAC11_avg:
+                print("BPAC11 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em BPAC11 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            RADL3_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=radl3"))
+            sheet1.update([[RADL3_value]], "F16")
+            sheet1.update([[RADL3_value]], "BS1000")
+            RADL3_avg = float(sheet1.acell("G16").value.replace(",", "."))
+            if RADL3_value < RADL3_avg:
+                print("RADL3 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em RADL3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            PSSA3_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=pssa3"))
+            sheet1.update([[PSSA3_value]], "F17")
+            sheet1.update([[PSSA3_value]], "BW1000")
+            PSSA3_avg = float(sheet1.acell("G17").value.replace(",", "."))
+            if PSSA3_value < PSSA3_avg:
+                print("PSSA3 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em PSSA3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            RENT3_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=rent3"))
+            sheet1.update([[RENT3_value]], "F18")
+            sheet1.update([[RENT3_value]], "CA1000")
+            RENT3_avg = float(sheet1.acell("G18").value.replace(",", "."))
+            if RENT3_value < RENT3_avg:
+                print("RENT3 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em RENT3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            EMBR3_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=embr3"))
+            sheet1.update([[EMBR3_value]], "F19") #CONTINUAR AQUI
+            sheet1.update([[EMBR3_value]], "CE1000")
+            EMBR3_avg = float(sheet1.acell("G19").value.replace(",", "."))
+            if EMBR3_value < EMBR3_avg:
+                print("EMBR3 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em EMBR3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            EGIE3_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=egie3"))
+            sheet1.update([[EGIE3_value]], "F20")
+            sheet1.update([[EGIE3_value]], "CI1000")
+            EGIE3_avg = float(sheet1.acell("G20").value.replace(",", "."))
+            if EGIE3_value < EGIE3_avg:
+                print("EGIE3 ABAIXO DA MEDIA!!")
+
+        except AttributeError:
+            print(f"Erro em EGIE3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
+        try:
+            GRND3_value = tofloat(getstock("https://www.google.com/search?client=firefox-b-d&q=grnd3"))
+            sheet1.update([[GRND3_value]], "F21")
+            sheet1.update([[GRND3_value]], "CM1000")
+            GRND3_avg = float(sheet1.acell("G21").value.replace(",", "."))
+            if GRND3_value < GRND3_avg:
+                print("GRND3 ABAIXO DA MEDIA!!")
+        except AttributeError:
+            print(f"Erro em GRND3 {now.strftime('%d/%m/%Y %H:%M:%S')}")
+            pass
