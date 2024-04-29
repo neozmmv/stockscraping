@@ -1,0 +1,189 @@
+from bs4 import BeautifulSoup
+from datetime import datetime
+import asyncio
+import httpx
+import time
+from win11toast import toast
+import requests
+import gspread
+
+gc = gspread.service_account(filename="gsheet.json")
+sheet1 = gc.open("StockAVG").sheet1
+sheet2 = gc.open("StockAVG").get_worksheet(1)
+sheet3 = gc.open("StockAVG").get_worksheet(2)
+def getstock(link) -> str:
+    stock_url = link
+    stock_result = requests.get(stock_url)
+    time.sleep(1)
+    stock = BeautifulSoup(stock_result.text, "html.parser")
+    stock_value = stock.find("div", {"class": "BNeawe iBp4i AP7Wnd"})
+    return stock_value.text
+
+def tofloat(value) -> float:
+    varfloat = value.split(" ")[0].replace(",", ".")
+    return float(varfloat)
+
+def update(stock_name, link, position1, position2, avgcell):
+    try:
+        stock_value = tofloat(getstock(link))
+        sheet1.update([[stock_value]], position1)
+        sheet1.update([[stock_value]], position2)
+        stock_avg = float(sheet1.acell(avgcell).value.replace(",", "."))
+        if stock_value < stock_avg:
+            print(f"{stock_name} ABAIXO DA MEDIA!!")
+            toast("ALERTA", f"{stock_name} ABAIXO DA MEDIA", duration="short")
+    except AttributeError:
+        print(f"Erro em {stock_name} {now.strftime('%d/%m/%Y %H:%M:%S')}")
+        pass
+
+now = datetime.now()
+print(f"Start: {now.strftime('%d/%m/%Y %H:%M:%S')}")
+print("CTRL C to stop")
+
+stockinfo = [
+    {
+        "stock_name": "PETR4",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=petr4",
+        "position1": "F2",
+        "position2": "O1000",
+        "avgcell": "G2"
+    },
+    {
+        "stock_name": "BBAS3",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=BVMF%3A+BBAS3",
+        "position1": "F3",
+        "position2": "S1000",
+        "avgcell": "G3"
+    },
+    {
+        "stock_name": "ITUB4",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=itub4",
+        "position1": "F4",
+        "position2": "W1000",
+        "avgcell": "G4"
+    },
+    {
+        "stock_name": "VALE3",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=vale3",
+        "position1": "F5",
+        "position2": "AA1000",
+        "avgcell": "G5"
+    },
+    {
+        "stock_name": "ABEV3",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=abev3",
+        "position1": "F6",
+        "position2": "AE1000",
+        "avgcell": "G6"
+    },
+    {
+        "stock_name": "SANB11",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=sanb11",
+        "position1": "F7",
+        "position2": "AI1000",
+        "avgcell": "G7"
+    },
+    {
+        "stock_name": "ITSA4",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=itsa4",
+        "position1": "F8",
+        "position2": "AM1000",
+        "avgcell": "G8"
+    },
+    {
+        "stock_name": "BBDC3",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=bbdc3",
+        "position1": "F9",
+        "position2": "AQ1000",
+        "avgcell": "G9"
+    },
+    {
+        "stock_name": "GOAU4",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=goau4",
+        "position1": "F10",
+        "position2": "AU1000",
+        "avgcell": "G10"
+    },
+    {
+        "stock_name": "ELET3",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=elet3",
+        "position1": "F11",
+        "position2": "AY1000",
+        "avgcell": "G11"
+    },
+    {
+        "stock_name": "CXSE3",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=cxse3",
+        "position1": "F12",
+        "position2": "BC1000",
+        "avgcell": "G12"
+    },
+    {
+        "stock_name": "WEGE3",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=wege3",
+        "position1": "F13",
+        "position2": "BG1000",
+        "avgcell": "G13"
+    },
+    {
+        "stock_name": "ASAI3",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=asai3",
+        "position1": "F14",
+        "position2": "BK1000",
+        "avgcell": "G14"
+    },
+    {
+        "stock_name": "BPAC11",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=bpac11",
+        "position1": "F15",
+        "position2": "BO1000",
+        "avgcell": "G15"
+    },
+    {
+        "stock_name": "RADL3",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=radl3",
+        "position1": "F16",
+        "position2": "BS1000",
+        "avgcell": "G16"
+    },
+    {
+        "stock_name": "PSSA3",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=pssa3",
+        "position1": "F17",
+        "position2": "BW1000",
+        "avgcell": "G17"
+    },
+    {
+        "stock_name": "RENT3",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=rent3",
+        "position1": "F18",
+        "position2": "CA1000",
+        "avgcell": "G18"
+    },
+    {
+        "stock_name": "EMBR3",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=embr3",
+        "position1": "F19",
+        "position2": "CE1000",
+        "avgcell": "G19"
+    },
+    {
+        "stock_name": "EGIE3",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=egie3",
+        "position1": "F20",
+        "position2": "CI1000",
+        "avgcell": "G20"
+    },
+    {
+        "stock_name": "GRND3",
+        "link": "https://www.google.com/search?client=firefox-b-d&q=grnd3",
+        "position1": "F21",
+        "position2": "CM1000",
+        "avgcell": "G21"
+    }
+]
+
+while True:
+    now = datetime.now()
+    for stock in stockinfo:
+        update(stock["stock_name"], stock["link"], stock["position1"], stock["position2"], stock["avgcell"])
