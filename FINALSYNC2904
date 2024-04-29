@@ -26,8 +26,6 @@ now = datetime.now()
 print(f"Start: {now.strftime('%d/%m/%Y %H:%M:%S')}")
 print("CTRL C to stop")
 
-#Linha 227
-
 with open("stockdata.csv", "a") as database:
     while True:
         now = datetime.now()
